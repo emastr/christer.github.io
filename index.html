@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Christers personliga hemsida med snabblänkar till favoritwebbsidor">
+    <meta name="author" content="Christer">
+    <meta property="og:title" content="Christers Hemsida">
+    <meta property="og:description" content="Personlig hemsida med snabblänkar">
+    <meta property="og:type" content="website">
     <title>Christers Hemsida</title>
     <style>
         * {
@@ -459,16 +464,25 @@
 
         // Load saved links from localStorage
         function loadLinks() {
-            const saved = localStorage.getItem('grandfatherLinks');
-            if (saved) {
-                linksData = JSON.parse(saved);
+            try {
+                const saved = localStorage.getItem('grandfatherLinks');
+                if (saved) {
+                    linksData = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.warn('Could not load saved links:', e);
+                // Keep default links if localStorage fails
             }
             renderLinks();
         }
 
         // Save links to localStorage
         function saveLinks() {
-            localStorage.setItem('grandfatherLinks', JSON.stringify(linksData));
+            try {
+                localStorage.setItem('grandfatherLinks', JSON.stringify(linksData));
+            } catch (e) {
+                console.warn('Could not save links:', e);
+            }
         }
 
         // Render all links
@@ -491,6 +505,7 @@
         function getFaviconUrl(url) {
             try {
                 const domain = new URL(url).hostname;
+                // Use HTTPS for GitHub Pages compatibility
                 return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
             } catch (e) {
                 return `https://www.google.com/s2/favicons?domain=google.com&sz=64`;
